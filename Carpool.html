@@ -1,0 +1,1127 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FAST Wheels — NUCES Karachi Carpool</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0e1a;
+    background-image: url("vintage-city-tour-frame-with-tourist-cartoon-illustration.jpg");
+    background-size: cover;        /* cover full screen */
+    background-repeat: no-repeat;  /* prevent repeating */
+    background-position: center;   /* center image */
+    height: 100vh;
+    --surface: #111827;
+    --surface2: #1a2235;
+    --border: #1f2d45;
+    --accent: #00d4ff;
+    --accent2: #ff6b35;
+    --green: #00e676;
+    --text: #e2e8f0;
+    --muted: #64748b;
+    --card: #131d2e;
+    --glow: rgba(0, 212, 255, 0.15);
+  }
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* BACKGROUND GRID */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image:
+      linear-gradient(rgba(0, 212, 255, 0.03) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(0, 212, 255, 0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+
+  /* NAV */
+  nav {
+    position: sticky;
+    top: 0;
+    z-index: 100;
+    background: rgba(10, 14, 26, 0.85);
+    backdrop-filter: blur(20px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    height: 64px;
+  }
+
+  .logo {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 1.3rem;
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+  .logo-icon {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, var(--accent), #0066ff);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem;
+  }
+  .logo span { color: var(--accent); }
+
+  .nav-tabs {
+    display: flex; gap: 4px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 4px;
+  }
+  .nav-tab {
+    padding: 6px 16px;
+    border-radius: 7px;
+    cursor: pointer;
+    font-size: 0.82rem;
+    font-weight: 600;
+    font-family: 'Syne', sans-serif;
+    transition: all 0.2s;
+    color: var(--muted);
+    border: none;
+    background: none;
+    letter-spacing: 0.3px;
+  }
+  .nav-tab.active {
+    background: var(--accent);
+    color: var(--bg);
+  }
+  .nav-tab:hover:not(.active) { color: var(--text); background: var(--surface2); }
+
+  /* MAIN */
+  main {
+    position: relative;
+    z-index: 1;
+    max-width: 1100px;
+    margin: 0 auto;
+    padding: 2rem 1.5rem;
+  }
+
+  /* SECTIONS */
+  .section { display: none; animation: fadeUp 0.35s ease; }
+  .section.active { display: block; }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(16px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  /* HERO */
+  .hero {
+    text-align: center;
+    padding: 3rem 0 2rem;
+  }
+  .hero-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: rgba(0, 212, 255, 0.1);
+    border: 1px solid rgba(0, 212, 255, 0.3);
+    color: var(--accent);
+    font-size: 0.75rem;
+    font-family: 'Space Mono', monospace;
+    padding: 5px 14px;
+    border-radius: 100px;
+    margin-bottom: 1.5rem;
+    letter-spacing: 1px;
+  }
+  .hero h1 {
+    font-size: clamp(2.2rem, 6vw, 4rem);
+    font-weight: 800;
+    line-height: 1.05;
+    margin-bottom: 1rem;
+  }
+  .hero h1 em {
+    font-style: normal;
+    color: var(--accent);
+  }
+  .hero p {
+    color: var(--muted);
+    font-size: 1.05rem;
+    max-width: 520px;
+    margin: 0 auto 2rem;
+    line-height: 1.6;
+  }
+  .hero-btns { display: flex; gap: 12px; justify-content: center; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    padding: 12px 28px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 700;
+    font-family: 'Syne', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.3px;
+  }
+  .btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,212,255,0.3); }
+  .btn-secondary {
+    background: transparent;
+    color: var(--text);
+    border: 1px solid var(--border);
+    padding: 12px 28px;
+    border-radius: 10px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    font-family: 'Syne', sans-serif;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .btn-secondary:hover { border-color: var(--accent); color: var(--accent); background: rgba(0,212,255,0.05); }
+
+  /* STATS BAR */
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    overflow: hidden;
+    margin: 2.5rem 0;
+  }
+  .stat {
+    background: var(--surface);
+    padding: 1.2rem;
+    text-align: center;
+  }
+  .stat-num {
+    font-size: 1.8rem;
+    font-weight: 800;
+    color: var(--accent);
+    font-family: 'Space Mono', monospace;
+    line-height: 1;
+  }
+  .stat-label { font-size: 0.72rem; color: var(--muted); margin-top: 4px; text-transform: uppercase; letter-spacing: 1px; }
+
+  /* ROUTE MAP VISUAL */
+  .route-section {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+  }
+  .section-title {
+    font-size: 0.7rem;
+    font-family: 'Space Mono', monospace;
+    color: var(--accent);
+    text-transform: uppercase;
+    letter-spacing: 2px;
+    margin-bottom: 1rem;
+  }
+  .locations-grid {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .location-chip {
+    display: flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 7px 12px;
+    font-size: 0.8rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: all 0.2s;
+    color: var(--text);
+  }
+  .location-chip:hover, .location-chip.selected {
+    border-color: var(--accent);
+    color: var(--accent);
+    background: rgba(0,212,255,0.08);
+  }
+  .location-chip .dot {
+    width: 6px; height: 6px;
+    background: var(--accent2);
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .location-chip.fast-uni .dot { background: var(--accent); }
+
+  /* BOT / CHAT */
+  .chat-container {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    height: 520px;
+  }
+  .chat-header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .bot-avatar {
+    width: 36px; height: 36px;
+    background: linear-gradient(135deg, var(--accent), #0066ff);
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1rem;
+    flex-shrink: 0;
+  }
+  .bot-info .bot-name { font-weight: 700; font-size: 0.9rem; }
+  .bot-info .bot-status {
+    display: flex; align-items: center; gap: 5px;
+    font-size: 0.72rem; color: var(--green);
+    font-family: 'Space Mono', monospace;
+  }
+  .bot-info .bot-status::before {
+    content: ''; width: 6px; height: 6px;
+    background: var(--green);
+    border-radius: 50%;
+    display: inline-block;
+    animation: pulse 2s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; } 50% { opacity: 0.4; }
+  }
+  .chat-messages {
+    flex: 1;
+    overflow-y: auto;
+    padding: 1rem;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    scroll-behavior: smooth;
+  }
+  .chat-messages::-webkit-scrollbar { width: 4px; }
+  .chat-messages::-webkit-scrollbar-track { background: transparent; }
+  .chat-messages::-webkit-scrollbar-thumb { background: var(--border); border-radius: 4px; }
+
+  .msg {
+    display: flex;
+    gap: 8px;
+    align-items: flex-end;
+  }
+  .msg.bot { align-self: flex-start; }
+  .msg.user { align-self: flex-end; flex-direction: row-reverse; }
+  .msg-avatar {
+    width: 28px; height: 28px;
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 0.8rem;
+    flex-shrink: 0;
+  }
+  .msg.bot .msg-avatar { background: linear-gradient(135deg, var(--accent), #0066ff); }
+  .msg.user .msg-avatar { background: var(--accent2); }
+  .msg-bubble {
+    max-width: 75%;
+    padding: 10px 14px;
+    border-radius: 12px;
+    font-size: 0.85rem;
+    line-height: 1.55;
+  }
+  .msg.bot .msg-bubble {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-bottom-left-radius: 4px;
+  }
+  .msg.user .msg-bubble {
+    background: var(--accent);
+    color: var(--bg);
+    border-bottom-right-radius: 4px;
+    font-weight: 600;
+  }
+  .msg-bubble pre {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.78rem;
+    white-space: pre-wrap;
+    word-break: break-word;
+  }
+
+  /* RIDE ALERT CARD */
+  .ride-alert {
+    background: linear-gradient(135deg, rgba(0,212,255,0.1), rgba(0,102,255,0.1));
+    border: 1px solid rgba(0,212,255,0.3);
+    border-radius: 12px;
+    padding: 12px 14px;
+    font-size: 0.82rem;
+    line-height: 1.7;
+  }
+  .ride-alert .alert-title {
+    font-weight: 700;
+    font-size: 0.88rem;
+    color: var(--accent);
+    margin-bottom: 6px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .ride-alert .alert-row { display: flex; gap: 8px; }
+  .ride-alert .alert-label { color: var(--muted); min-width: 70px; }
+  .ride-alert .alert-val { color: var(--text); font-weight: 600; }
+
+  /* CHAT INPUT */
+  .chat-input-area {
+    border-top: 1px solid var(--border);
+    padding: 0.8rem 1rem;
+    display: flex;
+    gap: 8px;
+    align-items: center;
+    background: var(--surface);
+  }
+  .chat-input {
+    flex: 1;
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 0.85rem;
+    color: var(--text);
+    font-family: 'Space Mono', monospace;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+  .chat-input::placeholder { color: var(--muted); }
+  .chat-input:focus { border-color: var(--accent); }
+  .send-btn {
+    background: var(--accent);
+    color: var(--bg);
+    border: none;
+    width: 40px; height: 40px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-size: 1rem;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+    transition: all 0.2s;
+  }
+  .send-btn:hover { transform: scale(1.05); box-shadow: 0 4px 12px rgba(0,212,255,0.4); }
+
+  /* QUICK COMMANDS */
+  .quick-cmds {
+    display: flex;
+    gap: 6px;
+    flex-wrap: wrap;
+    padding: 0.5rem 1rem;
+    border-top: 1px solid var(--border);
+    background: rgba(10,14,26,0.5);
+  }
+  .quick-cmd {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    color: var(--muted);
+    padding: 4px 10px;
+    border-radius: 6px;
+    font-size: 0.72rem;
+    font-family: 'Space Mono', monospace;
+    cursor: pointer;
+    transition: all 0.15s;
+  }
+  .quick-cmd:hover { border-color: var(--accent); color: var(--accent); }
+
+  /* RIDES TABLE */
+  .rides-grid {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+  }
+  .ride-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1rem 1.2rem;
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    transition: all 0.2s;
+    cursor: pointer;
+  }
+  .ride-card:hover { border-color: var(--accent); transform: translateX(4px); background: rgba(0,212,255,0.03); }
+  .ride-route {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-weight: 700;
+    font-size: 0.9rem;
+  }
+  .ride-arrow { color: var(--accent); font-size: 1rem; }
+  .ride-meta {
+    display: flex;
+    gap: 14px;
+    align-items: center;
+    font-size: 0.78rem;
+    color: var(--muted);
+  }
+  .ride-meta span { display: flex; align-items: center; gap: 4px; }
+  .ride-seats {
+    background: rgba(0,230,118,0.1);
+    border: 1px solid rgba(0,230,118,0.3);
+    color: var(--green);
+    padding: 3px 10px;
+    border-radius: 6px;
+    font-size: 0.75rem;
+    font-weight: 700;
+    font-family: 'Space Mono', monospace;
+    white-space: nowrap;
+  }
+  .ride-time {
+    font-family: 'Space Mono', monospace;
+    font-size: 0.8rem;
+    color: var(--accent2);
+    font-weight: 700;
+    white-space: nowrap;
+  }
+
+  /* COMMANDS PAGE */
+  .cmds-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 12px;
+    margin-top: 1rem;
+  }
+  .cmd-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    padding: 1.2rem;
+    transition: all 0.2s;
+  }
+  .cmd-card:hover { border-color: var(--accent); background: rgba(0,212,255,0.03); }
+  .cmd-title {
+    font-weight: 800;
+    font-size: 0.9rem;
+    margin-bottom: 6px;
+    color: var(--accent);
+  }
+  .cmd-syntax {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 7px;
+    padding: 8px 10px;
+    font-family: 'Space Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text);
+    margin-bottom: 8px;
+    line-height: 1.5;
+  }
+  .cmd-desc { font-size: 0.8rem; color: var(--muted); line-height: 1.5; }
+
+  /* FORM */
+  .post-form {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 1.5rem;
+  }
+  .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-bottom: 1rem; }
+  .form-group { display: flex; flex-direction: column; gap: 6px; }
+  .form-label { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 1px; color: var(--muted); }
+  .form-control {
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 10px 14px;
+    font-size: 0.85rem;
+    color: var(--text);
+    font-family: 'Syne', sans-serif;
+    outline: none;
+    transition: border-color 0.2s;
+    width: 100%;
+  }
+  .form-control:focus { border-color: var(--accent); }
+  .form-control option { background: var(--surface2); }
+  .type-toggle {
+    display: flex;
+    background: var(--surface2);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+  }
+  .type-btn {
+    flex: 1; padding: 10px;
+    border: none; cursor: pointer;
+    font-family: 'Syne', sans-serif;
+    font-size: 0.85rem; font-weight: 700;
+    transition: all 0.2s;
+    background: transparent;
+    color: var(--muted);
+  }
+  .type-btn.active { background: var(--accent); color: var(--bg); }
+
+  /* ALERT PREVIEW */
+  .alert-preview {
+    background: linear-gradient(135deg, rgba(0,212,255,0.08), rgba(0,102,255,0.08));
+    border: 1px solid rgba(0,212,255,0.25);
+    border-radius: 12px;
+    padding: 1.2rem;
+    margin-top: 1.5rem;
+    font-size: 0.85rem;
+    line-height: 1.8;
+    font-family: 'Space Mono', monospace;
+  }
+
+  /* PROFILE */
+  .profile-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    padding: 2rem;
+    display: flex;
+    gap: 2rem;
+    align-items: flex-start;
+  }
+  .profile-avatar {
+    width: 72px; height: 72px;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    border-radius: 16px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 2rem;
+    flex-shrink: 0;
+  }
+  .profile-info h2 { font-size: 1.2rem; font-weight: 800; margin-bottom: 4px; }
+  .profile-info .roll { font-family: 'Space Mono', monospace; font-size: 0.8rem; color: var(--accent); margin-bottom: 12px; }
+  .profile-stats { display: flex; gap: 1.5rem; }
+  .pstat { text-align: center; }
+  .pstat-n { font-size: 1.4rem; font-weight: 800; color: var(--accent); font-family: 'Space Mono', monospace; }
+  .pstat-l { font-size: 0.7rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; }
+
+  /* FOOTER */
+  footer {
+    text-align: center;
+    padding: 2rem;
+    color: var(--muted);
+    font-size: 0.75rem;
+    font-family: 'Space Mono', monospace;
+    border-top: 1px solid var(--border);
+    margin-top: 3rem;
+  }
+
+  @media (max-width: 640px) {
+    .nav-tabs { display: none; }
+    .stats-bar { grid-template-columns: repeat(2, 1fr); }
+    .form-row { grid-template-columns: 1fr; }
+    .profile-card { flex-direction: column; }
+    .ride-meta { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="logo">
+    <div class="logo-icon">🚗</div>
+    FAST <span>Wheels</span>
+  </div>
+  <div class="nav-tabs">
+    <button class="nav-tab active" onclick="showSection('home')">Home</button>
+    <button class="nav-tab" onclick="showSection('bot')">Bot</button>
+    <button class="nav-tab" onclick="showSection('rides')">All Rides</button>
+    <button class="nav-tab" onclick="showSection('post')">Post Ride</button>
+    <button class="nav-tab" onclick="showSection('commands')">Commands</button>
+    <button class="nav-tab" onclick="showSection('profile')">Profile</button>
+  </div>
+  <div style="display:flex;gap:8px;align-items:center">
+    <button class="btn-secondary" style="padding:7px 16px;font-size:0.8rem" onclick="showSection('profile')">👤 Login</button>
+  </div>
+</nav>
+
+<main>
+
+  <!-- HOME -->
+  <div class="section active" id="home">
+    <div class="hero">
+      <div class="hero-badge">🎓 NUCES Karachi · Est. 2024</div>
+      <h1>Smarter Commutes<br>for <em>FAST Students</em></h1>
+      <p>Connect with fellow students for daily rides between university and Karachi's major neighbourhoods. Save money, reduce traffic, make friends.</p>
+      <div class="hero-btns">
+        <button class="btn-primary" onclick="showSection('post')">🚗 Offer a Ride</button>
+        <button class="btn-secondary" onclick="showSection('rides')">🔍 Find a Ride</button>
+      </div>
+    </div>
+
+    <div class="stats-bar">
+      <div class="stat"><div class="stat-num">247</div><div class="stat-label">Active Riders</div></div>
+      <div class="stat"><div class="stat-num">1.2K</div><div class="stat-label">Rides Shared</div></div>
+      <div class="stat"><div class="stat-num">10</div><div class="stat-label">Zones Covered</div></div>
+      <div class="stat"><div class="stat-num">₨86K</div><div class="stat-label">Saved Monthly</div></div>
+    </div>
+
+    <div class="route-section">
+      <div class="section-title">// Covered Routes</div>
+      <div class="locations-grid">
+        <div class="location-chip fast-uni" onclick="filterLocation('FAST University')"><span class="dot"></span>FAST University</div>
+        <div class="location-chip" onclick="filterLocation('Clifton')"><span class="dot"></span>Clifton</div>
+        <div class="location-chip" onclick="filterLocation('DHA')"><span class="dot"></span>DHA</div>
+        <div class="location-chip" onclick="filterLocation('Gulshan-e-Iqbal')"><span class="dot"></span>Gulshan-e-Iqbal</div>
+        <div class="location-chip" onclick="filterLocation('Nazimabad')"><span class="dot"></span>Nazimabad</div>
+        <div class="location-chip" onclick="filterLocation('North Nazimabad')"><span class="dot"></span>North Nazimabad</div>
+        <div class="location-chip" onclick="filterLocation('Malir')"><span class="dot"></span>Malir</div>
+        <div class="location-chip" onclick="filterLocation('Korangi')"><span class="dot"></span>Korangi</div>
+        <div class="location-chip" onclick="filterLocation('Saddar')"><span class="dot"></span>Saddar</div>
+        <div class="location-chip" onclick="filterLocation('North Karachi')"><span class="dot"></span>North Karachi</div>
+        <div class="location-chip" onclick="filterLocation('Lyari')"><span class="dot"></span>Lyari</div>
+      </div>
+    </div>
+
+    <!-- Ride Alert Preview -->
+    <div class="route-section">
+      <div class="section-title">// Latest Ride Alert</div>
+      <div class="ride-alert">
+        <div class="alert-title">🔔 Ride Alert!</div>
+        <div style="line-height:1.9;font-size:0.83rem">
+          <div class="alert-row"><span class="alert-label">📍 Route</span><span class="alert-val">Gulshan-e-Iqbal → FAST University</span></div>
+          <div class="alert-row"><span class="alert-label">⏰ Departs</span><span class="alert-val">3:00 PM, Mar 27, 2026</span></div>
+          <div class="alert-row"><span class="alert-label">👥 Seats</span><span class="alert-val">1 available</span></div>
+          <div class="alert-row"><span class="alert-label">🚗 Vehicle</span><span class="alert-val">Car</span></div>
+          <div class="alert-row"><span class="alert-label">📞 Contact</span><span class="alert-val">+92 316 367 7xxx</span></div>
+          <div style="margin-top:8px;color:var(--muted);font-style:italic;font-size:0.78rem">Don't forget to ask for a ride tomorrow 😉</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BOT -->
+  <div class="section" id="bot">
+    <div style="margin-bottom:1.2rem">
+      <h2 style="font-size:1.3rem;font-weight:800;margin-bottom:4px">🤖 FAST Wheels Bot</h2>
+      <p style="color:var(--muted);font-size:0.85rem">Type commands just like our WhatsApp bot. Try "all rides", "my rides", "About", or post a ride.</p>
+    </div>
+
+    <div class="chat-container">
+      <div class="chat-header">
+        <div class="bot-avatar">🚗</div>
+        <div class="bot-info">
+          <div class="bot-name">FAST Wheels Bot</div>
+          <div class="bot-status">online</div>
+        </div>
+        <div style="margin-left:auto;font-size:0.72rem;color:var(--muted);font-family:'Space Mono',monospace">NUCES KHI</div>
+      </div>
+
+      <div class="chat-messages" id="chatMessages">
+        <div class="msg bot">
+          <div class="msg-avatar">🚗</div>
+          <div class="msg-bubble">
+            👋 Welcome to <strong>FAST Wheels!</strong><br><br>
+            Your student carpool network for NUCES Karachi. Type a command below or tap a quick button to get started!
+          </div>
+        </div>
+      </div>
+
+      <div class="quick-cmds">
+        <div class="quick-cmd" onclick="sendQuick('all rides')">all rides</div>
+        <div class="quick-cmd" onclick="sendQuick('my rides')">my rides</div>
+        <div class="quick-cmd" onclick="sendQuick('my profile')">my profile</div>
+        <div class="quick-cmd" onclick="sendQuick('About')">About</div>
+        <div class="quick-cmd" onclick="sendQuick('Have 2 seats from DHA to FAST at 8:00 AM')">Have seats</div>
+        <div class="quick-cmd" onclick="sendQuick('Need 1 ride from Clifton to FAST at 9:00 AM')">Need ride</div>
+      </div>
+
+      <div class="chat-input-area">
+        <input class="chat-input" id="chatInput" type="text" placeholder="Type a command… e.g. all rides" onkeydown="if(event.key==='Enter')sendMessage()">
+        <button class="send-btn" onclick="sendMessage()">➤</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ALL RIDES -->
+  <div class="section" id="rides">
+    <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:1.2rem;flex-wrap:wrap;gap:10px">
+      <div>
+        <h2 style="font-size:1.3rem;font-weight:800;margin-bottom:4px">Available Rides</h2>
+        <p style="color:var(--muted);font-size:0.82rem">Today's active carpool listings</p>
+      </div>
+      <select class="form-control" style="width:auto;padding:8px 12px" onchange="filterRides(this.value)">
+        <option value="all">All Locations</option>
+        <option>Clifton</option><option>DHA</option><option>Gulshan-e-Iqbal</option>
+        <option>Nazimabad</option><option>North Nazimabad</option><option>Malir</option>
+        <option>Korangi</option><option>Saddar</option><option>North Karachi</option><option>Lyari</option>
+      </select>
+    </div>
+    <div class="rides-grid" id="ridesGrid"></div>
+  </div>
+
+  <!-- POST RIDE -->
+  <div class="section" id="post">
+    <div style="margin-bottom:1.2rem">
+      <h2 style="font-size:1.3rem;font-weight:800;margin-bottom:4px">Post a Ride</h2>
+      <p style="color:var(--muted);font-size:0.82rem">Offer or request a carpool with fellow FAST students</p>
+    </div>
+
+    <div class="post-form">
+      <div class="type-toggle">
+        <button class="type-btn active" id="offerBtn" onclick="setType('offer')">🚗 I Have Seats</button>
+        <button class="type-btn" id="needBtn" onclick="setType('need')">🙋 I Need a Ride</button>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">From</label>
+          <select class="form-control" id="pickupSel">
+            <option value="">Select pickup</option>
+            <option>FAST University</option>
+            <option>Clifton</option><option>DHA</option><option>Gulshan-e-Iqbal</option>
+            <option>Nazimabad</option><option>North Nazimabad</option><option>Malir</option>
+            <option>Korangi</option><option>Saddar</option><option>North Karachi</option><option>Lyari</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">To</label>
+          <select class="form-control" id="destSel">
+            <option value="">Select destination</option>
+            <option>FAST University</option>
+            <option>Clifton</option><option>DHA</option><option>Gulshan-e-Iqbal</option>
+            <option>Nazimabad</option><option>North Nazimabad</option><option>Malir</option>
+            <option>Korangi</option><option>Saddar</option><option>North Karachi</option><option>Lyari</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label">Date</label>
+          <input class="form-control" type="date" id="dateIn">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Time</label>
+          <input class="form-control" type="time" id="timeIn">
+        </div>
+      </div>
+
+      <div class="form-row">
+        <div class="form-group">
+          <label class="form-label" id="seatsLabel">Seats Available</label>
+          <select class="form-control" id="seatsSel">
+            <option>1</option><option>2</option><option>3</option><option>4</option>
+          </select>
+        </div>
+        <div class="form-group" id="vehicleGroup">
+          <label class="form-label">Vehicle Type</label>
+          <select class="form-control" id="vehicleSel">
+            <option>Car</option><option>Bike (1 seat)</option><option>Rickshaw</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="form-group" style="margin-bottom:1rem">
+        <label class="form-label">Contact Number</label>
+        <input class="form-control" type="tel" id="contactIn" placeholder="03XX XXXXXXX">
+      </div>
+
+      <button class="btn-primary" style="width:100%;padding:13px" onclick="postRide()">✅ Post Ride</button>
+
+      <div class="alert-preview" id="alertPreview" style="display:none"></div>
+    </div>
+  </div>
+
+  <!-- COMMANDS -->
+  <div class="section" id="commands">
+    <div style="margin-bottom:1.2rem">
+      <h2 style="font-size:1.3rem;font-weight:800;margin-bottom:4px">Bot Commands</h2>
+      <p style="color:var(--muted);font-size:0.82rem">All available FAST Wheels Bot commands — works on WhatsApp & Web</p>
+    </div>
+    <div class="cmds-grid">
+      <div class="cmd-card">
+        <div class="cmd-title">🚗 Have a Seat</div>
+        <div class="cmd-syntax">Have X seat from [Pickup] to [Destination] at [Time]</div>
+        <div class="cmd-desc">Offer a carpool ride and specify available seats, route, and departure time.</div>
+      </div>
+      <div class="cmd-card">
+        <div class="cmd-title">🙋 Need a Ride</div>
+        <div class="cmd-syntax">Need X rides from [Pickup] to [Destination] at [Time]</div>
+        <div class="cmd-desc">Request a ride and let drivers know where you need to go and when.</div>
+      </div>
+      <div class="cmd-card">
+        <div class="cmd-title">📋 My Rides</div>
+        <div class="cmd-syntax">my rides</div>
+        <div class="cmd-desc">View all rides you've offered or requested. Manage and update them easily.</div>
+      </div>
+      <div class="cmd-card">
+        <div class="cmd-title">🔍 All Rides</div>
+        <div class="cmd-syntax">all rides</div>
+        <div class="cmd-desc">Browse all currently available carpool rides posted by students.</div>
+      </div>
+      <div class="cmd-card">
+        <div class="cmd-title">✅ Seats Filled</div>
+        <div class="cmd-syntax">All Seats filled<br>OR<br>[X] Seats filled</div>
+        <div class="cmd-desc">Confirm that all or a specific number of your offered seats have been taken.</div>
+      </div>
+      <div class="cmd-card">
+        <div class="cmd-title">👤 My Profile</div>
+        <div class="cmd-syntax">my profile</div>
+        <div class="cmd-desc">View your profile — rides offered, rides taken, and contact details.</div>
+      </div>
+      <div class="cmd-card">
+        <div class="cmd-title">ℹ️ About</div>
+        <div class="cmd-syntax">About</div>
+        <div class="cmd-desc">Learn more about the FAST Wheels project, how it works, and who built it.</div>
+      </div>
+      <div class="cmd-card">
+        <div class="cmd-title">🐛 Report a Bug</div>
+        <div class="cmd-syntax">Bug [Your Bug Description]</div>
+        <div class="cmd-desc">Found something broken? Send the bug description in a single message to report it.</div>
+      </div>
+      <div class="cmd-card">
+        <div class="cmd-title">🚨 Report a User</div>
+        <div class="cmd-syntax">Report [Your Issue]</div>
+        <div class="cmd-desc">Use this if someone booked a ride but cancelled after 1 hour or showed unprofessional behaviour.</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PROFILE -->
+  <div class="section" id="profile">
+    <div style="margin-bottom:1.2rem">
+      <h2 style="font-size:1.3rem;font-weight:800;margin-bottom:4px">My Profile</h2>
+      <p style="color:var(--muted);font-size:0.82rem">Your FAST Wheels account</p>
+    </div>
+    <div class="profile-card" style="margin-bottom:1.5rem">
+      <div class="profile-avatar">🧑‍💻</div>
+      <div class="profile-info">
+        <h2>M.ROHAN</h2>
+        <div class="roll">25K-3055 · CS Dept</div>
+        <div class="profile-stats">
+          <div class="pstat"><div class="pstat-n">12</div><div class="pstat-l">Rides Offered</div></div>
+          <div class="pstat"><div class="pstat-n">8</div><div class="pstat-l">Rides Taken</div></div>
+          <div class="pstat"><div class="pstat-n">4.9★</div><div class="pstat-l">Rating</div></div>
+        </div>
+      </div>
+    </div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px">
+      <div class="cmd-card">
+        <div class="cmd-title" style="color:var(--green)">✅ Active Offer</div>
+        <div style="font-size:0.82rem;line-height:1.7;margin-top:4px">
+          <div><strong>DHA → FAST</strong></div>
+          <div style="color:var(--muted)">⏰ 7:45 AM Daily</div>
+          <div style="color:var(--muted)">👥 2 seats left</div>
+        </div>
+      </div>
+      <div class="cmd-card">
+        <div class="cmd-title" style="color:var(--accent2)">📌 Past Ride</div>
+        <div style="font-size:0.82rem;line-height:1.7;margin-top:4px">
+          <div><strong>FAST → Clifton</strong></div>
+          <div style="color:var(--muted)">⏰ 5:00 PM, Mar 25</div>
+          <div style="color:var(--green)">✔ Completed</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<footer>FAST Wheels · NUCES Karachi Carpool Network · Built by students, for students 🚗</footer>
+
+<script>
+  // NAV
+  function showSection(id) {
+    document.querySelectorAll('.section').forEach(s => s.classList.remove('active'));
+    document.querySelectorAll('.nav-tab').forEach(t => t.classList.remove('active'));
+    document.getElementById(id).classList.add('active');
+    const tabs = document.querySelectorAll('.nav-tab');
+    const map = { home:0, bot:1, rides:2, post:3, commands:4, profile:5 };
+    if (tabs[map[id]]) tabs[map[id]].classList.add('active');
+    if (id === 'rides') renderRides();
+  }
+
+  // RIDES DATA
+  const ridesData = [
+    { from:'Gulshan-e-Iqbal', to:'FAST University', time:'8:00 AM', seats:2, vehicle:'Car', contact:'0316-3677xxx' },
+    { from:'DHA', to:'FAST University', time:'7:45 AM', seats:3, vehicle:'Car', contact:'0321-5551xxx' },
+    { from:'Clifton', to:'FAST University', time:'9:00 AM', seats:1, vehicle:'Car', contact:'0333-2221xxx' },
+    { from:'FAST University', to:'Nazimabad', time:'5:30 PM', seats:2, vehicle:'Car', contact:'0312-4441xxx' },
+    { from:'North Nazimabad', to:'FAST University', time:'8:30 AM', seats:2, vehicle:'Car', contact:'0300-1112xxx' },
+    { from:'FAST University', to:'Korangi', time:'6:00 PM', seats:3, vehicle:'Car', contact:'0345-7773xxx' },
+    { from:'Malir', to:'FAST University', time:'7:30 AM', seats:1, vehicle:'Bike', contact:'0311-9990xxx' },
+    { from:'FAST University', to:'Saddar', time:'5:00 PM', seats:2, vehicle:'Car', contact:'0317-6668xxx' },
+    { from:'North Karachi', to:'FAST University', time:'8:00 AM', seats:2, vehicle:'Car', contact:'0320-8882xxx' },
+    { from:'Lyari', to:'FAST University', time:'8:15 AM', seats:1, vehicle:'Car', contact:'0309-3334xxx' },
+  ];
+
+  let currentFilter = 'all';
+  function filterRides(val) { currentFilter = val; renderRides(); }
+  function renderRides() {
+    const grid = document.getElementById('ridesGrid');
+    const data = currentFilter === 'all' ? ridesData
+      : ridesData.filter(r => r.from === currentFilter || r.to === currentFilter);
+    grid.innerHTML = data.map(r => `
+      <div class="ride-card">
+        <div class="ride-route">
+          <span>${r.from}</span>
+          <span class="ride-arrow">→</span>
+          <span>${r.to}</span>
+        </div>
+        <div class="ride-meta">
+          <span>🚗 ${r.vehicle}</span>
+          <span>📞 ${r.contact}</span>
+        </div>
+        <div class="ride-time">${r.time}</div>
+        <div class="ride-seats">${r.seats} seat${r.seats>1?'s':''}</div>
+      </div>
+    `).join('') || `<div style="text-align:center;color:var(--muted);padding:2rem;font-family:'Space Mono',monospace;font-size:0.8rem">No rides found for this location</div>`;
+  }
+
+  function filterLocation(loc) {
+    showSection('rides');
+    currentFilter = loc;
+    const sel = document.querySelector('#rides select');
+    if (sel) {
+      for (let o of sel.options) { if (o.value === loc) { sel.value = loc; break; } }
+    }
+    renderRides();
+  }
+
+  // POST RIDE
+  let rideType = 'offer';
+  function setType(t) {
+    rideType = t;
+    document.getElementById('offerBtn').classList.toggle('active', t==='offer');
+    document.getElementById('needBtn').classList.toggle('active', t==='need');
+    document.getElementById('seatsLabel').textContent = t === 'offer' ? 'Seats Available' : 'Seats Needed';
+    document.getElementById('vehicleGroup').style.display = t === 'offer' ? '' : 'none';
+  }
+
+  function postRide() {
+    const from = document.getElementById('pickupSel').value;
+    const to = document.getElementById('destSel').value;
+    const date = document.getElementById('dateIn').value;
+    const time = document.getElementById('timeIn').value;
+    const seats = document.getElementById('seatsSel').value;
+    const contact = document.getElementById('contactIn').value || '03XX-XXXXXXX';
+    const vehicle = document.getElementById('vehicleSel').value;
+
+    if (!from || !to || !date || !time) {
+      alert('Please fill in all required fields.');
+      return;
+    }
+
+    const formattedDate = new Date(date).toLocaleDateString('en-GB', {day:'2-digit',month:'short',year:'numeric'});
+    const formattedTime = new Date(`2000-01-01T${time}`).toLocaleTimeString('en-US', {hour:'2-digit',minute:'2-digit'});
+    const prev = document.getElementById('alertPreview');
+    prev.style.display = 'block';
+
+    if (rideType === 'offer') {
+      prev.innerHTML = `
+🔔 <strong>Ride Alert!</strong><br>
+A new ride is now available!<br><br>
+📍 ${from} → ${to}<br>
+⏰ Departure: ${formattedTime} on ${formattedDate}<br>
+👥 Seats: ${seats}<br>
+🚗 Vehicle: ${vehicle}<br>
+📞 Contact: ${contact}<br>
+<br>
+<em style="color:var(--muted);font-size:0.78rem">Don't forget to ask for a ride tomorrow 😉</em>
+      `;
+      ridesData.unshift({ from, to, time: formattedTime, seats: parseInt(seats), vehicle, contact });
+    } else {
+      prev.innerHTML = `
+🙋 <strong>Ride Request!</strong><br>
+Someone needs a ride!<br><br>
+📍 ${from} → ${to}<br>
+⏰ Needed at: ${formattedTime} on ${formattedDate}<br>
+👥 Seats needed: ${seats}<br>
+📞 Contact: ${contact}<br>
+      `;
+    }
+    prev.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+  }
+
+  // BOT
+  const botResponses = {
+    'all rides': () => {
+      let msg = `🚗 <strong>Available Rides (${ridesData.length})</strong>\n\n`;
+      ridesData.slice(0,5).forEach((r,i) => {
+        msg += `${i+1}. ${r.from} → ${r.to}\n   ⏰ ${r.time} · 👥 ${r.seats} seat${r.seats>1?'s':''} · 🚗 ${r.vehicle}\n   📞 ${r.contact}\n\n`;
+      });
+      return msg;
+    },
+    'my rides': () => `📋 <strong>Your Rides</strong>\n\n1. DHA → FAST University\n   ⏰ 7:45 AM · 👥 2 seats · 🚗 Car\n   Status: ✅ Active\n\n2. FAST University → Clifton\n   ⏰ 5:00 PM, Mar 25 · ✔ Completed`,
+    'my profile': () => `👤 <strong>Your Profile</strong>\n\nName: M.ROHAN\nRoll: 25K-3055\nDept: CS\n⭐ Rating: 4.9\n🚗 Rides Offered: 12\n🙋 Rides Taken: 8`,
+    'about': () => `ℹ️ <strong>About FAST Wheels</strong>\n\nFAST Wheels is a student-run carpool network for NUCES Karachi. Connect with fellow students to share rides between university and 10+ Karachi neighbourhoods.\n\n💡 Save money, reduce traffic, and make new friends on your daily commute!\n\nBuilt by students, for students 🎓`,
+  };
+
+  function getBotReply(msg) {
+    const lower = msg.toLowerCase().trim();
+
+    if (lower === 'all rides') return botResponses['all rides']();
+    if (lower === 'my rides') return botResponses['my rides']();
+    if (lower === 'my profile') return botResponses['my profile']();
+    if (lower === 'about') return botResponses['about']();
+
+    const haveMatch = lower.match(/have (\d+) seat[s]? from (.+?) to (.+?) at (.+)/);
+    if (haveMatch) {
+      const [, seats, from, to, time] = haveMatch;
+      ridesData.unshift({ from, to, time, seats: parseInt(seats), vehicle: 'Car', contact: 'Your number' });
+      return `✅ <strong>Ride Posted!</strong>\n\n📍 ${from.trim()} → ${to.trim()}\n⏰ ${time.trim()}\n👥 ${seats} seat${seats>1?'s':''}\n\n🔔 Ride alert sent to matching students!`;
+    }
+
+    const needMatch = lower.match(/need (\d+) ride[s]? from (.+?) to (.+?) at (.+)/);
+    if (needMatch) {
+      const [, n, from, to, time] = needMatch;
+      return `🙋 <strong>Ride Request Submitted!</strong>\n\n📍 ${from.trim()} → ${to.trim()}\n⏰ ${time.trim()}\n👥 ${n} seat${n>1?'s':''} needed\n\n🔔 We'll notify you when a matching ride is posted!`;
+    }
+
+    if (lower.includes('seats filled') || lower.includes('seat filled')) {
+      return `✅ <strong>Seats Updated!</strong>\n\nYour ride has been marked as filled. Other students have been notified.`;
+    }
+
+    if (lower.startsWith('bug ')) {
+      return `🐛 <strong>Bug Reported</strong>\n\nThank you! Your report has been logged:\n"${msg.substring(4)}"\n\nOur team will look into it soon.`;
+    }
+
+    if (lower.startsWith('report ')) {
+      return `🚨 <strong>Report Received</strong>\n\nWe've logged your report:\n"${msg.substring(7)}"\n\nAction will be taken within 24 hours if the report is valid.`;
+    }
+
+    return `❓ I didn't understand that command.\n\nTry one of these:\n• <em>all rides</em>\n• <em>my rides</em>\n• <em>my profile</em>\n• <em>About</em>\n• <em>Have 2 seats from DHA to FAST at 8:00 AM</em>\n• <em>Need 1 ride from Clifton to FAST at 9:00 AM</em>`;
+  }
+
+  function addMsg(content, role) {
+    const container = document.getElementById('chatMessages');
+    const div = document.createElement('div');
+    div.className = `msg ${role}`;
+    div.innerHTML = `
+      <div class="msg-avatar">${role === 'bot' ? '🚗' : '👤'}</div>
+      <div class="msg-bubble" style="white-space:pre-wrap">${content}</div>
+    `;
+    container.appendChild(div);
+    container.scrollTop = container.scrollHeight;
+  }
+
+  function sendMessage() {
+    const input = document.getElementById('chatInput');
+    const msg = input.value.trim();
+    if (!msg) return;
+    addMsg(msg, 'user');
+    input.value = '';
+    setTimeout(() => addMsg(getBotReply(msg), 'bot'), 400);
+  }
+
+  function sendQuick(cmd) {
+    document.getElementById('chatInput').value = cmd;
+    sendMessage();
+  }
+
+  // Init
+  document.getElementById('dateIn').value = new Date().toISOString().split('T')[0];
+  renderRides();
+</script>
+</body>
+</html>
